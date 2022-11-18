@@ -35,7 +35,7 @@ app.post('/', function (req, res) {
   console.log(req.body);
   const data = req.body;
   const moves = ["F", "T", "L", "R"];
-  
+  // findMeaningfulMove(data)
   if (personInFront(data)) {
     res.send(moves[1]);
   } else {
@@ -56,10 +56,18 @@ function myHref(data) {
 
 function findMeaningfulMove (data) {
   const myhref = myHref(data);
+  const participants = data.arena.state;
   var myState = participants[myhref]
   const myX = myState.x;
   const myY = myState.y;
-  const X = data.arena.dims
+  const X = data.arena.dims[0];
+  const Y = data.arena.dims[1];
+  const dir = myState.direction;
+  
+  if (myX == X && dir == 'E') {
+
+  }
+
 }
 
 function personInFront(data) {
@@ -76,7 +84,7 @@ function personInFront(data) {
           continue
         }
         if (myX === participants[k].x) {
-          if (myY - participants[k].y >= 0 && myY - participants[k].y <= 3) {
+          if (myY - participants[k].y <= 0 && myY - participants[k].y >= -3) {
             return true;
           }
         }
@@ -84,7 +92,7 @@ function personInFront(data) {
       break;
     case "W":
       for(var k in participants) {
-        if (k == myhref)
+        if (k === myhref)
           continue
         if (myY === participants[k].y) {
           if (myX - participants[k].x >= 0 && myX - participants[k].x <= 3) {
@@ -95,10 +103,10 @@ function personInFront(data) {
       break;
     case "S":
       for(var k in participants) {
-        if (k == myhref)
+        if (k === myhref)
           continue
-        if (myY === participants[k].y) {
-          if (myX - participants[k].x <= 0 && myX - participants[k].x >= -3) {
+        if (myX === participants[k].x) {
+          if (myY - participants[k].y >= 0 && myY - participants[k].y <= 3) {
             return true;
           }
         }
@@ -106,10 +114,10 @@ function personInFront(data) {
       break;
     case "E":
       for(var k in participants) {
-        if (k == myhref)
+        if (k === myhref)
           continue
-        if (myX === participants[k].x) {
-          if (myY - participants[k].y <= 0 && myX - participants[k].x >= -3) {
+        if (myY === participants[k].y) {
+          if (myX - participants[k].x <= 0 && myX - participants[k].x >= -3) {
             return true;
           }
         }
