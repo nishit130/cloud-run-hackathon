@@ -48,6 +48,10 @@ app.post('/', function (req, res) {
     prevScore = myState.score;
     res.send(moves[1]);
   } else {
+    if (myState.score < prevScore) {
+      prevScore = myState.score;
+      res.send(moves[Math.floor(Math.random() * moves.length)])
+    }
     // make random move
     var meaningFulMove = findMeaningfulMove(data, myState);
     console.log("move");
