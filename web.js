@@ -17,16 +17,16 @@ app.get('/', function (req, res) {
 //   },
 //   "arena": {
 //     "dims": [4,3], // width, height
-//     "state": {
-//       "https://A_PLAYERS_URL": {
-//         "x": 0, // zero-based x position, where 0 = left
-//         "y": 0, // zero-based y position, where 0 = top
-//         "direction": "N", // N = North, W = West, S = South, E = East
-//         "wasHit": false,
-//         "score": 0
-//       }
-//       ... // also you and the other players
-//     }
+    // "state": {
+    //   "https://A_PLAYERS_URL": {
+    //     "x": 0, // zero-based x position, where 0 = left
+    //     "y": 0, // zero-based y position, where 0 = top
+    //     "direction": "N", // N = North, W = West, S = South, E = East
+    //     "wasHit": false,
+    //     "score": 0
+    //   }
+    //   ... // also you and the other players
+    // }
 //   }
 // }
 
@@ -35,7 +35,7 @@ app.post('/', function (req, res) {
   console.log(req.body);
   const data = req.body;
   const moves = ["F", "T", "L", "R"];
-
+  
   if (personInFront(data)) {
     res.send(moves[1]);
   } else {
@@ -46,59 +46,56 @@ app.post('/', function (req, res) {
 
 app.listen(process.env.PORT || 8080);
 
-function myState(data) {
+function myHref(data) {
   const link = data._links.self.href;
   const state = link;
-  console.log(state);
-
+  console.log("mystate: ", state)
   return state;
 }
 
 function personInFront(data) {
-  const state = myState(data);
+  const myhref = myHref(data);
   const participants = data.arena.state;
-  const myX = state.x;
-  const myY = state.y;
-  switch (state.direction) {
+  var myState = participants[myhref]
+  const myX = myState.x;
+  const myY = myState.y;
+
+  switch (myState.direction) {
     case "N":
-      participants.forEach(function (participant) {
-        console.log(participant);
-        if (myX === participant.x) {
-          if (myY - participant.y >= 0 && myY - participant.y <= 3) {
+      for(var k in participants) {
+        if (myX === participants[k].x) {
+          if (myY - participants[k].y >= 0 && myY - participants[k].y <= 3) {
             return true;
           }
         }
-      });
+      }
       break;
     case "W":
-      friends.forEach(function (participant) {
-        console.log(participant);
-        if (myY === participant.y) {
-          if (myX - participant.x >= 0 && myX - participant.x <= 3) {
+      for(var k in participants) {
+        if (myY === participants[k].y) {
+          if (myX - participants[k].x >= 0 && myX - participants[k].x <= 3) {
             return true;
           }
         }
-      });
+      }
       break;
     case "S":
-      friends.forEach(function (participant) {
-        console.log(friend);
-        if (myY === participant.y) {
-          if (myX - participant.x <= 0 && myX - participant.x >= -3) {
+      for(var k in participants) {
+        if (myY === participants[k].y) {
+          if (myX - participants[k].x <= 0 && myX - participants[k].x >= -3) {
             return true;
           }
         }
-      });
+      }
       break;
     case "E":
-      friends.forEach(function (participant) {
-        console.log(participant);
-        if (myX === participant.x) {
-          if (myY - participant.y <= 0 && myX - participant.x >= -3) {
+      for(var k in participants) {
+        if (myX === participants[k].x) {
+          if (myY - participants[k].y <= 0 && myX - participants[k].x >= -3) {
             return true;
           }
         }
-      });
+      }
       break;
     default:
       return false;
