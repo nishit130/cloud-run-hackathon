@@ -36,12 +36,13 @@ app.post('/', function (req, res) {
   const data = req.body;
   const moves = ["F", "T", "L", "R"];
   
-  if (personInFront(data)) {
-    res.send(moves[1]);
-  } else {
-    // make random move
+  // if (personInFront(data)) {
+  //   res.send(moves[1]);
+  // } else {
+  //   // make random move
+    
     res.send(moves[Math.floor(Math.random() * moves.length)]);
-  }
+  // }
 });
 
 app.listen(process.env.PORT || 8080);
@@ -51,6 +52,14 @@ function myHref(data) {
   const state = link;
   console.log("mystate: ", state)
   return state;
+}
+
+function findMeaningfulMove (data) {
+  const myhref = myHref(data);
+  var myState = participants[myhref]
+  const myX = myState.x;
+  const myY = myState.y;
+  const X = data.arena.dims
 }
 
 function personInFront(data) {
