@@ -49,9 +49,10 @@ app.post('/', function (req, res) {
     res.send(moves[1]);
   } else {
     // make random move
+    var meaningFulMove = findMeaningfulMove(data, myState);
     console.log("move");
     prevScore = myState.score;
-    res.send(moves[Math.floor(Math.random() * moves.length)]);
+    res.send(meaningFulMove);
   }
 });
 
@@ -63,37 +64,63 @@ function findMyHref(data) {
   return state;
 }
 
-function countPeopleAttackingMe(data) {
-  const myhref = findMyHref(data);
-  const participants = data.arena.state;
-  var myState = participants[myhref]
-  const myX = myState.x;
-  const myY = myState.y;
-  var count = 0;
-  for (var k in participants) {
-    if (k == myhref) {
-      continue
-    }
-    if (personInFront(data, participants[k], k)) {
-      count++;
-    }
-  }
-  console.log("People attacking: ", count);
-  return count;
-}
-
-// function findMeaningfulMove (data) {
+// function countPeopleAttackingMe(data) {
+//   const myhref = findMyHref(data);
 //   const participants = data.arena.state;
+//   var myState = participants[myhref]
 //   const myX = myState.x;
 //   const myY = myState.y;
-//   const X = data.arena.dims[0];
-//   const Y = data.arena.dims[1];
-//   const dir = myState.direction;
-
-//   var
-
-
+//   var count = 0;
+//   for (var k in participants) {
+//     if (k == myhref) {
+//       continue
+//     }
+//     if (personInFront(data, participants[k], k)) {
+//       count++;
+//     }
+//   }
+//   console.log("People attacking: ", count);
+//   return count;
 // }
+
+function sameX (mydir, hisY, myY) {
+  if (mydir == 'E' && hisY > myY || (mydir == 'W' && hisY < myY)) {
+    return "L";
+  } else if ((mydir == 'E' && hisY < myY) || (mydir == 'W' && hisY > myY)) {
+    return "R";
+  }
+  if (mydir == 'N' || mydir == 'S') {
+    return "R";
+  }
+}
+
+function sameY (mydir, hisX, myX) {
+  if (mydir == 'N' && hisX < myX || (mydir == 'S' && hisX > myX)) {
+    return "L";
+  } else if ((mydir == 'N' && hisX > myX) || (mydir == 'S' && hisX < myX)) {
+    return "R";
+  }
+  if (mydir == 'E' || mydir == 'W') {
+    return "R";
+  }
+}
+
+function findMeaningfulMove (data, myState) {
+  const participants = data.arena.state;
+  const myX = myState.x;
+  const myY = myState.y;
+  const dir = myState.direction
+
+  for (var k in participants) {
+    if (myX == participants[k].x) {
+      return sameX(dir, participants[k].y, myY)
+    } else if (myY == participants[k].y) {
+      return sameY(dir, participants[k].x, myX)
+    }
+  }
+  const moves = ["F", "F", "L", "R", "F", "F", "R", "L"];
+  moves[Math.floor(Math.random() * moves.length)]
+}
 
 function personInFront(data, myState, myhref) {
   
