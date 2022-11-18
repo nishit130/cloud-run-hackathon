@@ -41,7 +41,7 @@ app.post('/', function (req, res) {
   const myhref = findMyHref(data);
   var myState = participants[myhref]
 
-  if (personInFront(data, myState, myhref) && countPeopleAttackingMe(data) < 2) {
+  if (personInFront(data, myState, myhref)) {
     res.send(moves[1]);
   } else {
     // make random move
