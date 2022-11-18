@@ -32,11 +32,16 @@ app.get('/', function (req, res) {
 
 
 app.post('/', function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   const data = req.body;
-  const moves = ["F", "T", "L", "R"];
+  const moves = ["F", "T", "L", "R", "F", "F"];
   // findMeaningfulMove(data)
-  if (personInFront(data)) {
+
+  const participants = data.arena.state;
+  const myhref = findMyHref(data);
+  var myState = participants[myhref]
+
+  if (personInFront(data, myState, myhref) && countPeopleAttackingMe(data) < 2) {
     res.send(moves[1]);
   } else {
     // make random move
@@ -47,33 +52,56 @@ app.post('/', function (req, res) {
 
 app.listen(process.env.PORT || 8080);
 
-function myHref(data) {
+function findMyHref(data) {
   const link = data._links.self.href;
   const state = link;
-  console.log("mystate: ", state)
   return state;
 }
 
-function findMeaningfulMove (data) {
-  const myhref = myHref(data);
+function countPeopleAttackingMe(data) {
+  const myhref = findMyHref(data);
   const participants = data.arena.state;
   var myState = participants[myhref]
   const myX = myState.x;
   const myY = myState.y;
-  const X = data.arena.dims[0];
-  const Y = data.arena.dims[1];
-  const dir = myState.direction;
-  
-  if (myX == X && dir == 'E') {
-
+  var count = 0;
+  for (var k in participants) {
+    if (k == myhref) {
+      continue
+    }
+    if (personInFront(data, participants[k], k)) {
+      count++;
+    }
   }
-
+  console.log("People attacking: ", count);
+  return count;
 }
 
-function personInFront(data) {
-  const myhref = myHref(data);
+// function findMeaningfulMove (data) {
+//   const participants = data.arena.state;
+//   const myX = myState.x;
+//   const myY = myState.y;
+//   const X = data.arena.dims[0];
+//   const Y = data.arena.dims[1];
+//   const dir = myState.direction;
+
+//   var moves = ['F', 'T', 'L', 'R']
+  
+//   // if (myX == X && dir == 'E' && (myY != Y && myY != 0) ) {
+//   //   const moves = ['N', 'W', 'S'];
+//   //   return moves[Math.floor(Math.random() * moves.length)];
+//   // } else if (myX == 0 && dir == 'W' && (myY != Y && myY != 0)) {
+//   //   const moves = ['N', 'E', 'S'];
+//   //   return moves[Math.floor(Math.random() * moves.length)];
+//   // } else if (myY == Y && dir == 'N' && (myX != X && myX != 0)) {
+
+//   // }
+
+// }
+
+function personInFront(data, myState, myhref) {
+  
   const participants = data.arena.state;
-  var myState = participants[myhref]
   const myX = myState.x;
   const myY = myState.y;
 
