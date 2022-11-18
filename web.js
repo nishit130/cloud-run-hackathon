@@ -102,7 +102,7 @@ function personInFront(data, myState, myhref) {
   const myY = myState.y;
 
   switch (myState.direction) {
-    case "N":
+    case "S":
       for(var k in participants) {
         if (k === myhref) {
           continue
@@ -125,7 +125,7 @@ function personInFront(data, myState, myhref) {
         }
       }
       break;
-    case "S":
+    case "N":
       for(var k in participants) {
         if (k === myhref)
           continue
