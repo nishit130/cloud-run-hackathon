@@ -112,9 +112,9 @@ function findMeaningfulMove (data, myState) {
   const dir = myState.direction
 
   for (var k in participants) {
-    if (myX == participants[k].x) {
+    if (myX == participants[k].x && Math.abs(myX - participants[k].x) <= 3) {
       return sameX(dir, participants[k].y, myY)
-    } else if (myY == participants[k].y) {
+    } else if (myY == participants[k].y && Math.abs(myY - participants[k].y) <= 3) {
       return sameY(dir, participants[k].x, myX)
     }
   }
