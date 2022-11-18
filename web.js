@@ -36,13 +36,13 @@ app.post('/', function (req, res) {
   const data = req.body;
   const moves = ["F", "T", "L", "R"];
   
-  // if (personInFront(data)) {
-  //   res.send(moves[1]);
-  // } else {
-  //   // make random move
+  if (personInFront(data)) {
+    res.send(moves[1]);
+  } else {
+    // make random move
     
     res.send(moves[Math.floor(Math.random() * moves.length)]);
-  // }
+  }
 });
 
 app.listen(process.env.PORT || 8080);
@@ -72,6 +72,9 @@ function personInFront(data) {
   switch (myState.direction) {
     case "N":
       for(var k in participants) {
+        if (k === myhref) {
+          continue
+        }
         if (myX === participants[k].x) {
           if (myY - participants[k].y >= 0 && myY - participants[k].y <= 3) {
             return true;
@@ -81,6 +84,8 @@ function personInFront(data) {
       break;
     case "W":
       for(var k in participants) {
+        if (k == myhref)
+          continue
         if (myY === participants[k].y) {
           if (myX - participants[k].x >= 0 && myX - participants[k].x <= 3) {
             return true;
@@ -90,6 +95,8 @@ function personInFront(data) {
       break;
     case "S":
       for(var k in participants) {
+        if (k == myhref)
+          continue
         if (myY === participants[k].y) {
           if (myX - participants[k].x <= 0 && myX - participants[k].x >= -3) {
             return true;
@@ -99,6 +106,8 @@ function personInFront(data) {
       break;
     case "E":
       for(var k in participants) {
+        if (k == myhref)
+          continue
         if (myX === participants[k].x) {
           if (myY - participants[k].y <= 0 && myX - participants[k].x >= -3) {
             return true;
