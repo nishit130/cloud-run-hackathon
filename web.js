@@ -44,10 +44,12 @@ app.post('/', function (req, res) {
   var myState = participants[myhref]
   
   if (personInFront(data, myState, myhref) && myState.score >= prevScore) {
+    console.log("Throw");
     prevScore = myState.score;
     res.send(moves[1]);
   } else {
     // make random move
+    console.log("move");
     prevScore = myState.score;
     res.send(moves[Math.floor(Math.random() * moves.length)]);
   }
@@ -88,17 +90,8 @@ function countPeopleAttackingMe(data) {
 //   const Y = data.arena.dims[1];
 //   const dir = myState.direction;
 
-//   var moves = ['F', 'T', 'L', 'R']
-  
-//   // if (myX == X && dir == 'E' && (myY != Y && myY != 0) ) {
-//   //   const moves = ['N', 'W', 'S'];
-//   //   return moves[Math.floor(Math.random() * moves.length)];
-//   // } else if (myX == 0 && dir == 'W' && (myY != Y && myY != 0)) {
-//   //   const moves = ['N', 'E', 'S'];
-//   //   return moves[Math.floor(Math.random() * moves.length)];
-//   // } else if (myY == Y && dir == 'N' && (myX != X && myX != 0)) {
+//   var
 
-//   // }
 
 // }
 
