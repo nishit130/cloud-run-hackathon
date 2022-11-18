@@ -42,7 +42,7 @@ app.post('/', function (req, res) {
   const participants = data.arena.state;
   const myhref = findMyHref(data);
   var myState = participants[myhref]
-  
+  console.log(myX, myY);
   if (personInFront(data, myState, myhref) && myState.score >= prevScore) {
     console.log("Throw");
     prevScore = myState.score;
