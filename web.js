@@ -30,6 +30,8 @@ app.get('/', function (req, res) {
 //   }
 // }
 
+var prevScore = 0;
+
 
 app.post('/', function (req, res) {
   // console.log(req.body);
@@ -40,12 +42,13 @@ app.post('/', function (req, res) {
   const participants = data.arena.state;
   const myhref = findMyHref(data);
   var myState = participants[myhref]
-
-  if (personInFront(data, myState, myhref)) {
+  
+  if (personInFront(data, myState, myhref) && myState.score >= prevScore) {
+    prevScore = myState.score;
     res.send(moves[1]);
   } else {
     // make random move
-    
+    prevScore = myState.score;
     res.send(moves[Math.floor(Math.random() * moves.length)]);
   }
 });
